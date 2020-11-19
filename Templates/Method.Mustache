@@ -1,0 +1,12 @@
+﻿{{ #IsAsync }}async {{/IsAsync}}def {{Name}}({{ ArgumentsString }}) -> {{ ReturnType }}:
+    {{ #CommentString }}
+    """
+    {{ CommentsString }}
+    """
+    {{ /CommentString }}
+    {{ #Statements }}
+    {{ Generate }}
+    {{ /Statements }}
+    {{ ^Statements }}
+    pass
+    {{ /Statements }}

@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\Assignment.Mustache" />
+    <None Remove="Templates\Class.Mustache" />
+    <None Remove="Templates\Constructor.Mustache" />
+    <None Remove="Templates\Field.Mustache" />
+    <None Remove="Templates\Method.Mustache" />
+    <None Remove="Templates\Return.Mustache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\Assignment.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Class.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Constructor.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Field.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Method.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Return.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodeBuilder\CodeBuilder.csproj" />
+  </ItemGroup>
+
+</Project>

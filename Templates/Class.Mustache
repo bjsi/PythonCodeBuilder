@@ -1,0 +1,20 @@
+﻿class {{ Name }}({{ BaseString }}):
+
+{{ #CommentString }}
+    """
+    {{ CommentString }}
+    """
+{{ /CommentString }}
+{{ #Fields}}
+    {{ Generate }}
+{{ /Fields }}
+{{ #Constructor }}
+    {{ Generate }}
+{{ /Constructor }}
+{{ ^Constructor }}
+    def __init__(self):
+        pass
+{{ /Constructor }}
+{{ #Methods }}
+    {{ Generate }}
+{{ /Methods }}
