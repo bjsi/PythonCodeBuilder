@@ -5,7 +5,8 @@ namespace PythonCodeBuilder.Statements
 {
     public class PyAssignment : Assignment
     {
-        private static string TemplateFilePath = Path.Combine(Const.TemplateFolderPath, "PythonAssignment.Mustache");
+        private static string TemplateFilePath = Path.Combine(PyConst.TemplateFolderPath, "Assignment.Mustache");
+        public override string ToString() => Generate();
         public PyAssignment(string lhs, string rhs)
             : base(TemplateFilePath)
         {

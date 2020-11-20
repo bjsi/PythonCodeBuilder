@@ -6,7 +6,7 @@ namespace PythonCodeBuilder.Objects
     public class PyField : Field
     {
 
-        private static string TemplateFilePath = Path.Combine(Const.TemplateFolderPath, "PythonField.Mustache");
+        private static string TemplateFilePath = Path.Combine(PyConst.TemplateFolderPath, "Field.Mustache");
 
         public PyField(string name, string type)
             : base(TemplateFilePath)
@@ -15,11 +15,12 @@ namespace PythonCodeBuilder.Objects
             this.Type = type;
         }
 
+        public override string ToString() => Generate();
+
         public PyField WithComment(string comment)
         {
             this.Comment = (comment);
             return this;
         }
-
     }
 }

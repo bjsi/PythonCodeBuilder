@@ -1,5 +1,6 @@
 ﻿using CodeBuilder.Objects;
 using CodeBuilder.Statements;
+using PythonCodeBuilder.Statements;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PythonCodeBuilder.Objects
     public class PyMethod : Method
     {
 
-        private static string TemplateFilePath = Path.Combine(Const.TemplateFolderPath, "PythonMethod.Mustache");
+        private static string TemplateFilePath = Path.Combine(PyConst.TemplateFolderPath, "Method.Mustache");
         public bool IsAsync { get; }
 
         public PyMethod(string name, bool async, string returnType) 
@@ -20,7 +21,7 @@ namespace PythonCodeBuilder.Objects
             this.ReturnType = returnType;
         }
 
-        public string ArgumentsString => string.Join(", ", Arguments.Select(x => $"{x.Name}: {x.Type}"));
+        public string ArgumentsString => string.Join(", ", Arguments);
         public string CommentsString => string.Join("\n\t", Comments);
 
         public PyMethod WithComment(string comment)
@@ -29,28 +30,30 @@ namespace PythonCodeBuilder.Objects
             return this;
         }
 
-        public PyMethod WithArgument(Argument arg)
+        public PyMethod WithArgument(PyArgument arg)
         {
             this.Arguments.Add(arg);
             return this;
         }
 
-        public PyMethod WithArguments(IEnumerable<Argument> args)
+        public PyMethod WithArguments(IEnumerable<PyArgument> args)
         {
             this.Arguments.AddRange(args);
             return this;
         }
 
-        public PyMethod WithStatement(Assignment statement)
+        public PyMethod WithStatement(PyAssignment statement)
         {
             this.Statements.Add(statement);
             return this;
         }
 
-        public PyMethod WithStatement(ReturnStatement statement)
+        public PyMethod WithStatement(PyReturn statement)
         {
             this.Statements.Add(statement);
             return this;
         }
+
+        public override string ToString() => Generate();
     }
 }

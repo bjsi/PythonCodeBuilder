@@ -7,7 +7,7 @@ namespace PythonCodeBuilder.Objects
     public class PyClass : Class
     {
 
-        private static string TemplateFilePath = Path.Combine(Const.TemplateFolderPath, "PythonClass.Mustache");
+        private static string TemplateFilePath = Path.Combine(PyConst.TemplateFolderPath, "Class.Mustache");
 
         public PyClass(string name)
             : base(TemplateFilePath)
@@ -59,5 +59,7 @@ namespace PythonCodeBuilder.Objects
             this.Methods.Add(method);
             return this;
         }
+
+        public override string ToString() => Generate();
     }
 }

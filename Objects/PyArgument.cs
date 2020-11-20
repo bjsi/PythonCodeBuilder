@@ -1,5 +1,5 @@
-﻿using CodeBuilder.Objects;
-using System.IO;
+﻿using CodeBuilder.Helpers;
+using CodeBuilder.Objects;
 
 namespace PythonCodeBuilder.Objects
 {
@@ -10,5 +10,12 @@ namespace PythonCodeBuilder.Objects
             this.Name = name;
             this.Type = type;
         }
+
+        public override string ToString()
+        {
+            return Type.IsNullOrEmpty()
+                ? $"{Name}"
+                : $"{Name}: {Type}";
+        } 
     }
 }
