@@ -9,6 +9,7 @@
     <None Remove="Templates\Class.Mustache" />
     <None Remove="Templates\Constructor.Mustache" />
     <None Remove="Templates\Field.Mustache" />
+    <None Remove="Templates\File.Mustache" />
     <None Remove="Templates\Method.Mustache" />
     <None Remove="Templates\Return.Mustache" />
   </ItemGroup>
@@ -24,6 +25,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Field.Mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\File.Mustache">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Method.Mustache">

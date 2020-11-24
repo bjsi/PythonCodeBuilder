@@ -1,13 +1,15 @@
 ﻿using CodeBuilder.Expressions;
+using PythonCodeBuilder.Helpers;
 using System.Collections.Generic;
 
 namespace PythonCodeBuilder.Expressions
 {
     public class PyMethodInvoke : MethodInvoke
     {
-        public PyMethodInvoke(string name, params string[] args)
+        public PyMethodInvoke(string methodName, params string[] args)
         {
-            this.MethodName = name;
+            methodName.ThrowIfNullOrEmpty("Failed to create method invoke expression because method name is null or empty");
+            this.MethodName = methodName;
             this.WithArguments(args);
         }
 

@@ -1,9 +1,8 @@
 ﻿using CodeBuilder.Objects;
-using CodeBuilder.Statements;
+using PythonCodeBuilder.Helpers;
 using PythonCodeBuilder.Statements;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace PythonCodeBuilder.Objects
 {
@@ -16,6 +15,9 @@ namespace PythonCodeBuilder.Objects
         public PyMethod(string name, bool async, string returnType) 
             : base(TemplateFilePath)
         {
+            name.ThrowIfNullOrEmpty("Failed to create method because the name was null or empty");
+            returnType.ThrowIfArgumentNull("Failed to create method because return type was null");
+
             this.Name = name;
             this.IsAsync = async;
             this.ReturnType = returnType;

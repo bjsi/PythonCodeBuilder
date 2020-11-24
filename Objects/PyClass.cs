@@ -1,4 +1,5 @@
 ﻿using CodeBuilder.Objects;
+using PythonCodeBuilder.Helpers;
 using System.Collections.Generic;
 using System.IO;
 
@@ -12,6 +13,7 @@ namespace PythonCodeBuilder.Objects
         public PyClass(string name)
             : base(TemplateFilePath)
         {
+            name.ThrowIfNullOrEmpty("Failed to create argument because name was null or empty");
             this.Name = name;
         }
 

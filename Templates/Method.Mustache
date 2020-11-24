@@ -5,8 +5,8 @@
     """
     {{ /CommentString }}
     {{ #Statements }}
-    {{ Generate }}
+        {{ . }}
     {{ /Statements }}
     {{ ^Statements }}
-    pass
+        pass
     {{ /Statements }}
