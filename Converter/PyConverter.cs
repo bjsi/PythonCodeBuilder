@@ -47,21 +47,55 @@ namespace PythonCodeBuilder.Converter
             Class = new PyClass(className);
         }
 
-        public string Convert()
+        public PyConverter WithMethods()
+        {
+            ConvertMethods();
+            return this;
+        }
+
+        /// <summary>
+        /// Only for Enums
+        /// </summary>
+        /// <returns></returns>
+        public PyConverter WithFields()
         {
             if (CSType.IsEnum)
             {
-                Class.Constructor = null;
                 Class.WithBaseClass("Enum");
                 ConvertFields();
-                return Class.ToString();
             }
 
-            ConvertMethods();
-            ConvertFields();
-            ConditionallyTransformConstructor();
+            return this;
+        }
 
+        public PyConverter WithConstructor()
+        {
+            ConditionallyTransformConstructor();
+            return this;
+        }
+
+        public PyConverter WithProperties()
+        {
+            ConvertProperties();
+            return this;
+        }
+
+        public string Convert()
+        { 
             return Class.ToString();
+        }
+
+        private void ConvertProperties()
+        {
+            var properties = GeneratedFrom.GetProperties().Where(x => !x.IsSpecialName);
+            foreach (var prop in properties)
+            {
+                var name = prop.Name;
+                var type = prop.PropertyType;
+                var pyType = TypeConverter.Convert(type);
+                var pyfield = new PyField(name, pyType);
+                Class.WithField(pyfield);
+            }
         }
 
         private void ConvertFields()
