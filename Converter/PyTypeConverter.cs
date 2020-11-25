@@ -12,16 +12,16 @@ namespace PythonCodeBuilder.Converter
         // Simple Types 
         // TODO: Incomplete
         public static Dictionary<Type, string> PrimitiveTypes = new Dictionary<Type, string>
-    {
-      { typeof(int), "int" },
-      { typeof(IntPtr), "int"},
-      { typeof(float), "float" },
-      { typeof(double), "float" },
-      { typeof(string), "str" },
-      { typeof(bool), "bool" },
-      { typeof(byte), "byte" },
-      { typeof(void), "None" },
-    };
+        {
+            [typeof(int)] = "int",
+            [typeof(IntPtr)] = "int",
+            [typeof(float)] = "float",
+            [typeof(double)] = "float",
+            [typeof(string)] = "str",
+            [typeof(bool)] = "bool",
+            [typeof(byte)] = "byte",
+            [typeof(void)] = "None",
+        };
 
         public Dictionary<Type, string> TypeMapExtensions { get; } = new Dictionary<Type, string>();
 

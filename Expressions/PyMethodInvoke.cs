@@ -6,10 +6,17 @@ namespace PythonCodeBuilder.Expressions
 {
     public class PyMethodInvoke : MethodInvoke
     {
-        public PyMethodInvoke(string methodName, params string[] args)
+        private bool IsAwait { get; }
+
+        public override string ToString() => IsAwait
+            ? $"await {MethodName}({string.Join(", ", Arguments)})"
+            : $"{MethodName}({string.Join(", ", Arguments)})";
+
+        public PyMethodInvoke(string methodName, bool await, params string[] args)
         {
             methodName.ThrowIfNullOrEmpty("Failed to create method invoke expression because method name is null or empty");
             this.MethodName = methodName;
+            this.IsAwait = await;
             this.WithArguments(args);
         }
 

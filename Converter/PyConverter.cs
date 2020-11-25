@@ -13,27 +13,54 @@ namespace PythonCodeBuilder.Converter
     {
 
         private Type CSType { get; }
+        private Type GeneratedFrom { get; } // TODO: Generated from == the SMA type the service type was generated from
         private PyClass Class { get; set; }
-        private List<IMethodTransformer> MethodTransformers { get; }
+        private List<IMethodParameterTransformer> MethodTransformers { get; }
+        private IConstructorTransformer ConstructorTransformer { get; }
+        private List<IMethodReturnTransformer> ReturnTransformers { get; }
         private PyTypeConverter TypeConverter { get; }
 
-        public PyConverter(string name, Type csType, List<IMethodTransformer> methodTransformers, PyTypeConverter typeConverter)
+        /// <summary>
+        /// Generated from == the SMA type the service type was generated from
+        /// </summary>
+        public PyConverter(string className,
+                           Type csServiceType,
+                           Type generatedFrom,
+                           List<IMethodParameterTransformer> methodTransformers,
+                           List<IMethodReturnTransformer> returnTransformers,
+                           PyTypeConverter typeConverter,
+                           IConstructorTransformer consTransformer = null)
         {
-            name.ThrowIfArgumentNull("Failed to create converter because class name was empty");
-            csType.ThrowIfArgumentNull("Failed to create converter because c# type was null");
+            className.ThrowIfArgumentNull("Failed to create converter because class name was empty");
+            csServiceType.ThrowIfArgumentNull("Failed to create converter because c# type was null");
+            generatedFrom.ThrowIfArgumentNull("Failed to create converter because generated from type was null");
             methodTransformers.ThrowIfArgumentNull("Failed to create converter because method transform map was null");
+            returnTransformers.ThrowIfArgumentNull("Failed to create converter because return transformers were null");
             typeConverter.ThrowIfArgumentNull("Failed to create converter because type converter was null");
 
+            this.ConstructorTransformer = consTransformer;
             this.TypeConverter = typeConverter;
-            this.CSType = csType;
+            this.GeneratedFrom = generatedFrom;
+            this.CSType = csServiceType;
+            this.ReturnTransformers = returnTransformers;
             this.MethodTransformers = methodTransformers;
-            Class = new PyClass(name);
+            Class = new PyClass(className);
         }
 
         public string Convert()
         {
             ConvertMethods();
+            ConditionallyAddConstructor();
+
             return Class.ToString();
+        }
+
+        private void ConditionallyAddConstructor()
+        {
+            if (ConstructorTransformer != null && ConstructorTransformer.Matches(GeneratedFrom))
+            {
+                ConstructorTransformer.Transform(Class);
+            }
         }
 
         private void ConvertMethods()
@@ -51,18 +78,18 @@ namespace PythonCodeBuilder.Converter
             var pyReturnType = TypeConverter.Convert(method.ReturnType);
             var pyMethod = new PyMethod(name, true, pyReturnType);
             var thisFieldRef = new PyThisField("_server");
-            var methodInvoke = new PyMethodInvoke($"{thisFieldRef}.{name}");
+            var methodInvoke = new PyMethodInvoke($"{thisFieldRef}.{name}", true);
 
             foreach (var p in method.GetParameters())
             {
                 bool handled = false;
                 foreach (var t in MethodTransformers)
                 {
-                    if (t.Matches(p, CSType))
+                    // Allows multiple transforms
+                    if (t.Matches(p, GeneratedFrom))
                     {
                         methodInvoke = t.Transform(methodInvoke);
                         handled = true;
-                        break;
                     }
                 }
 
@@ -76,7 +103,17 @@ namespace PythonCodeBuilder.Converter
 
             }
 
-            pyMethod.WithStatement(new PyReturn(methodInvoke.ToString()));
+            var returnStatement = new PyReturn(methodInvoke.ToString());
+            foreach (var rTrans in ReturnTransformers)
+            {
+                if (rTrans.Matches(method.ReturnType))
+                {
+                    rTrans.Transform(method.ReturnType, returnStatement);
+                    break;
+                }
+            }
+
+            pyMethod.WithStatement(returnStatement);
             return pyMethod;
         }
     }
