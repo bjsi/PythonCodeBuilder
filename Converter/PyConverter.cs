@@ -49,13 +49,50 @@ namespace PythonCodeBuilder.Converter
 
         public string Convert()
         {
+            if (CSType.IsEnum)
+            {
+                Class.Constructor = null;
+                Class.WithBaseClass("Enum");
+                ConvertFields();
+                return Class.ToString();
+            }
+
             ConvertMethods();
-            ConditionallyAddConstructor();
+            ConvertFields();
+            ConditionallyTransformConstructor();
 
             return Class.ToString();
         }
 
-        private void ConditionallyAddConstructor()
+        private void ConvertFields()
+        {
+            Type enumUnderlyingType = Enum.GetUnderlyingType(GeneratedFrom);
+
+            var names = Enum.GetNames(GeneratedFrom);
+            var values = Enum.GetValues(GeneratedFrom);
+            if (names.Length != values.Length)
+                throw new Exception("Unexpected length mismatch");
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                // Retrieve the value of the ith enum item.
+                object value = values.GetValue(i);
+
+                // Convert the value to its underlying type (int, byte, long, ...)
+                object underlyingValue = System.Convert.ChangeType(value, enumUnderlyingType);
+
+                string pyValue = underlyingValue.ToString();
+
+                string name = names[i];
+
+                string pyType = TypeConverter.Convert(enumUnderlyingType);
+
+                var pyField = new PyField(name, pyType, pyValue);
+                Class.WithField(pyField);
+            }
+        }
+
+        private void ConditionallyTransformConstructor()
         {
             if (ConstructorTransformer != null && ConstructorTransformer.Matches(GeneratedFrom))
             {
