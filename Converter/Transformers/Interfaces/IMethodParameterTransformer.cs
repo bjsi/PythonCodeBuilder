@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-namespace PythonCodeBuilder.Converter
+namespace PythonCodeBuilder.Converter.Transformers.Interfaces
 {
     public interface IMethodParameterTransformer
     {

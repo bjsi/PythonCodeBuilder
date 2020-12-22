@@ -1,7 +1,7 @@
 ﻿using PythonCodeBuilder.Objects;
 using System;
 
-namespace PythonCodeBuilder.Converter
+namespace PythonCodeBuilder.Converter.Transformers.Interfaces
 {
     public interface IConstructorTransformer
     {

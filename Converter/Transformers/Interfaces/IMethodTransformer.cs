@@ -1,7 +1,7 @@
 ﻿using PythonCodeBuilder.Statements;
 using System;
 
-namespace PythonCodeBuilder.Converter
+namespace PythonCodeBuilder.Converter.Transformers.Interfaces
 {
     public interface IMethodReturnTransformer
     {

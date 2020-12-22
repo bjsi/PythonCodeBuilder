@@ -1,4 +1,5 @@
-﻿using PythonCodeBuilder.Expressions;
+﻿using PythonCodeBuilder.Converter.Transformers.Interfaces;
+using PythonCodeBuilder.Expressions;
 using PythonCodeBuilder.Helpers;
 using PythonCodeBuilder.Objects;
 using PythonCodeBuilder.Statements;
@@ -20,9 +21,6 @@ namespace PythonCodeBuilder.Converter
         private List<IMethodReturnTransformer> ReturnTransformers { get; }
         private PyTypeConverter TypeConverter { get; }
 
-        /// <summary>
-        /// Generated from == the SMA type the service type was generated from
-        /// </summary>
         public PyConverter(string className,
                            Type csServiceType,
                            Type generatedFrom,
